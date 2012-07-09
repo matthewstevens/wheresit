@@ -12,6 +12,12 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+class OwnedItem(models.Model):
+    """
+    An instance of an item owned by a person
+    """
+    item = models.ForeignKey(Item)
+
 class BorrowedItem(models.Model):
     """
     An occurance of an item being borrowed
@@ -19,6 +25,6 @@ class BorrowedItem(models.Model):
     date_created = models.DateTimeField(default=datetime.now)
     borrower = models.ForeignKey(Person)
     owner = models.ForeignKey(Person, related_name='owner')
-    item = models.ForeignKey(Item, related_name='item')
+    owned_item = models.ForeignKey(OwnedItem, related_name='owned_item')
     def __str__(self):
         return "{0} borrowed {1} from {2}".format(self.borrower.name, self.item.name, self.owner.name)

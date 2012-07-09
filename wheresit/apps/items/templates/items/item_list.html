@@ -7,9 +7,9 @@
 {% block body %}
 <ul>
     {% for item in object_list %}
-        <li>
+    <li><a href={{ item.pk }}>
         {{ item.name }}
-        </li>
+    </a></li>
     {% endfor %}
 </ul>
 {% endblock %}
