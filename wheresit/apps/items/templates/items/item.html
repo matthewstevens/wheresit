@@ -1,0 +1,11 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% block head_title %}New Item{% endblock %}
+{% block body_class %}new_item{% endblock %}
+{% block body %}
+<div>{{ item.name }}</div>
+<div>{{ item.item_type }}</div>
+<div>{{ item.meta_tags }}</div>
+{% endblock %}

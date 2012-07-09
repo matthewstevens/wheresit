@@ -1,0 +1,20 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% block head_title %}New Item{% endblock %}
+{% block body_class %}new_item{% endblock %}
+{% block body %}
+<form action="search_items" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+<ul>
+    {% for item in items %}
+    <li><a href={{item.pk}}>
+        {{ item.name }}
+        </a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
