@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.db import models
-from apps.profiles.models import Person
+from apps.profiles.models import Person, Profile
 
 class Item(models.Model):
     """
@@ -17,6 +17,8 @@ class OwnedItem(models.Model):
     An instance of an item owned by a person
     """
     item = models.ForeignKey(Item)
+    user = models.ForeignKey(Profile)
+
 
 class BorrowedItem(models.Model):
     """

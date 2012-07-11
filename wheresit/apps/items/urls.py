@@ -6,8 +6,9 @@ from models import Item
 import views
 
 urlpatterns = patterns('',
-    url(r"^(?P<pk>\d+)$", DetailView.as_view(model=Item, template_name="items/item.html")),
+    url(r"^(?P<pk>\d+)$", DetailView.as_view(model=Item, template_name="items/item.html"), name="item_display"),
     url(r"create_item$", views.CreateItemView.as_view(), name="item_new"),
+    url(r"add_to_collection/(?P<pk>\d+)$",views.AddToCollection.as_view(), name="add_to_collection"),
     url(r"list_items$", views.ListItemView.as_view(), name="item_list"),
     url(r"search_items$", views.SearchFormView.as_view(), name="item_search"),
 )

@@ -1,6 +1,14 @@
-from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView
+from django.views.generic import CreateView, \
+        DetailView, \
+        FormView, \
+        ListView, \
+        RedirectView, \
+        TemplateView
+from django.core.urlresolvers import reverse
+from django import http
 from forms import ItemForm, ItemSearchForm
-from models import Item
+from models import Item, OwnedItem
+from apps.profiles.models import Profile
 
 class CreateItemView(CreateView):
     template_name = "items/item_new.html"
@@ -27,3 +35,21 @@ class SearchFormView(FormView):
             results = results.filter(meta_tags=tags_search)
         context['items'] = results
         return self.render_to_response(context)
+
+class AddToCollection(RedirectView):
+    url = "../%(pk)"
+    def get(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        if request.user:
+            profile = Profile.objects.get(user=request.user)
+            item = Item.objects.get(pk=pk)
+            owned_item = OwnedItem.objects.get(item = item, user = profile)
+            if not owned_item:
+                owned_item = OwnedItem(
+                    item=item,
+                    user=profile         
+                )
+                owned_item.save()
+
+        return http.HttpResponseRedirect(reverse("item_display", kwargs={'pk': item.pk}))
+        #return self.get(request, *args, **kwargs)

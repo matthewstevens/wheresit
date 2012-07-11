@@ -2,10 +2,11 @@
 
 {% load i18n %}
 {% load ifsetting_tag %}
-{% block head_title %}New Item{% endblock %}
-{% block body_class %}new_item{% endblock %}
+{% block head_title %}{{ item.name }}{% endblock %}
+{% block body_class %}display_item{% endblock %}
 {% block body %}
 <div>{{ item.name }}</div>
 <div>{{ item.item_type }}</div>
 <div>{{ item.meta_tags }}</div>
+<a href='add_to_collection/{{ item.pk }}' class=button>Add to Collection</a>
 {% endblock %}
