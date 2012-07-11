@@ -4,6 +4,7 @@ from django.views.generic import CreateView, \
         ListView, \
         RedirectView, \
         TemplateView
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django import http
 from forms import ItemForm, ItemSearchForm
@@ -36,20 +37,14 @@ class SearchFormView(FormView):
         context['items'] = results
         return self.render_to_response(context)
 
-class AddToCollection(RedirectView):
+class AddToCollectionView(RedirectView):
     url = "../%(pk)"
     def get(self, request, *args, **kwargs):
         pk = kwargs['pk']
         if request.user:
             profile = Profile.objects.get(user=request.user)
-            item = Item.objects.get(pk=pk)
-            owned_item = OwnedItem.objects.get(item = item, user = profile)
-            if not owned_item:
-                owned_item = OwnedItem(
-                    item=item,
-                    user=profile         
-                )
-                owned_item.save()
-
+            item = get_object_or_404(Item, pk=pk)
+            owned_item = OwnedItem.objects.get_or_create(item = item, user = profile)
+            # at this point we probably want to redirect to the owned item page
         return http.HttpResponseRedirect(reverse("item_display", kwargs={'pk': item.pk}))
         #return self.get(request, *args, **kwargs)
